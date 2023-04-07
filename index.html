@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script>
+    let access_token = "";
+    let refresh_token = "";
+    async function createToken() {
+        const result = await axios({
+            method: 'post', 
+            url: 'http://localhost:8000/createToken', 
+            data: {
+                userID: document.getElementById("userID").value
+            } 
+        });
+        access_token = result.data.accessToken;
+        refresh_token = result.data.refreshToken;
+        console.log(access_token);
+        console.log(refresh_token);
+    }
+    async function getToken() {
+        const result = await axios({
+            method: 'post', 
+            url: 'http://localhost:8000/getToken', 
+            headers: { authorization: access_token },
+            data: {
+                userID: document.getElementById("userID").value
+            } 
+        });
+        console.log(result);
+    }
+    async function getList() {
+        const result = await axios({
+            method: 'get', 
+            url: 'http://localhost:8000/getList', 
+            data: {} 
+        });
+
+        console.log(result.data);
+    }
+</script>
+<body>
+    <h1>Hello World</h1>
+    <input id="userID" type="text">
+    <button onclick="createToken()">Create Token</button>
+    <button onclick="getToken()">Get Token</button>
+    <button onclick="getList()">Token List</button>
+</body>
+</html>
